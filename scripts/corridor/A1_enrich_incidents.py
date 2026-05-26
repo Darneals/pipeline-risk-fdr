@@ -230,7 +230,7 @@ def compute_hazard_scores(df: pd.DataFrame) -> pd.DataFrame:
     # Age proxy: current year minus installation year (normalised)
     years = df["INSTALLATION_YEAR"].apply(_parse_year)
     age_raw = years.apply(
-        lambda y: float(REFERENCE_YEAR - y) if y is not None else float(MAX_PIPE_AGE * 0.6)
+        lambda y: float(REFERENCE_YEAR - y) if not pd.isna(y) else float(MAX_PIPE_AGE * 0.6)
     )
     age_norm = (age_raw.clip(0, MAX_PIPE_AGE) / MAX_PIPE_AGE)
 
