@@ -25,7 +25,7 @@ The framework:
 ## Repository Structure
 
 ```
-icvars-pipeline-risk/
+cd pipeline-risk-fdr
 │
 ├── scripts/
 │   └── corridor/
