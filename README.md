@@ -99,8 +99,8 @@ data/
 
 ### Step 1 — Clone the repository
 ```bash
-git clone https://github.com/Darneals/cexr-pipeline-risk.git
-cd icvars-pipeline-risk
+git clone https://github.com/Darneals/pipeline-risk-fdr.git
+cd pipeline-risk-fdr
 ```
 
 ### Step 2 — Create the Python environment
@@ -230,6 +230,38 @@ The verified results from the paper are:
 Permutation count: B = 999. FDR threshold: α = 0.05. All results are reproducible by following the pipeline above.
 
 ---
+
+## Quick Test
+
+To verify the core hazard scoring logic without downloading the full PHMSA datasets, run the self-contained test script from the project root:
+
+```bash
+python quick_test.py
+```
+
+No external data files are required. The script generates ten synthetic incidents internally using the same column schema as the PHMSA Excel file and runs them through the full hazard scoring pipeline (`A1_enrich_incidents.py` logic).
+
+Expected output:
+
+```
+Running hazard scoring quick-test...
+
+  PASS  Row count preserved
+  PASS  All hazard scores finite and non-negative
+  PASS  Corrosion cause score > equipment failure cause score
+  PASS  Unknown cause receives 0.50 baseline weight
+  PASS  Missing installation year handled — no NaN in vulnerability score
+
+Result: 5 passed, 0 failed
+```
+
+The test covers:
+- All eight PHMSA cause categories including the unmapped baseline
+- Missing and string-encoded installation years (`"UNKNOWN"`, `None`)
+- Missing pipe diameter (median imputation)
+- Zero-cost and multi-fatality edge cases
+
+> **Note:** A `WARNING: geopandas not installed` message may appear if the conda environment has not been activated. This only affects the spatial join stage; all five scoring tests run on NumPy and pandas alone. To activate the full environment: `conda activate rim12`
 
 
 ```
